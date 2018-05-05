@@ -51,10 +51,9 @@ def find_data(query):
 
     ret = ""
     for data in query():
-        print(data)
-        print(type(data))
+        # print(type(data))
         ret += str(data)
-    print('ret = %s' % ret)
+    # print('ret = %s' % ret)
     return ret
 
 
@@ -75,13 +74,15 @@ def run():
         json_data = xml_to_dict(sms)
 
         sender = sms.get('contact_name').encode('utf-8') if sms.get('type') == '1' else 'Me'
-        json_data['sender'] = str(sender)
+        # print('sender = %s' % sender.decode("utf-8") )
+        # print(type(sender))
+        json_data['sender'] = sender.decode('utf-8')
         item = json_to_b(json_data)
         session.add(item)
 
         date = time.strftime("%D %H:%M", time.localtime(int(sms.get('date'))))
         body = sms.get('body').encode('utf-8')
-        line = '%s - %s : %s\n' % (date, sender, body)
+        # line = '%s - %s : %s\n' % (date, sender, body)
 
 
         # f.write(line)
@@ -93,9 +94,9 @@ def run():
     # print('Testing f to_file')
     # to_file("I'm testing\ncheck")
 
-    print('Testing find data')
-    find_data(session.query(Backup).all)
-
+    # print('Testing find data')
+    ret = find_data(session.query(Backup).all)
+    print(ret)
 
 
 if __name__ == '__main__':
